@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
     database:
         image: mysql:5.7
@@ -8,7 +8,7 @@ services:
         ports:
             - "3307:3306" # (*)
         restart: on-failure:5
-        environment: 
+        environment:
             MYSQL_USER: wordpress
             MYSQL_DATABASE: wordpress
             MYSQL_PASSWORD: wordpress
@@ -16,7 +16,8 @@ services:
     wordpress:
         depends_on:
             - database
-        image: wordpress:latest
+        # image: wordpress:latest
+        image: computocell/wordpress:latest
         ports:
             - "8000:80" # (*)
         restart: on-failure:5
@@ -38,17 +39,17 @@ services:
         tty: true
         depends_on:
             - wordpress
-        image: mfuezesi/wordmove
+        image: computocell/wordmove:latest
         restart: on-failure:5
-        container_name: my_wordmove  # (+)
+        container_name: my_wordmove # (+)
         volumes:
             - ./config:/home
             - ./public:/var/www/html
-            - ~/.ssh:/root/.ssh      # (!)
+            - ~/.ssh:/root/.ssh # (!)
 #######################################
 #
-# In case you want to reuse this config 
-# for another Wordpress project and 
+# In case you want to reuse this config
+# for another Wordpress project and
 # them have both run *simultaneously*
 # you'll need to:
 #
@@ -60,13 +61,13 @@ services:
 #   to another one   - marked as (*)
 #   "<new_host_port>:<container_port>"
 #   e.g.
-#    - change wordpres port numbers 
+#    - change wordpres port numbers
 #      from "8000:80" to "8001:80"
-#    - change phmyadmin port numbers 
+#    - change phmyadmin port numbers
 #      from "8080:80" to "8081:80
-#    - change database port numbers 
-#      form "3307:3306" to "3308:3306" 
+#    - change database port numbers
+#      form "3307:3306" to "3308:3306"
 #
-# (!) Copy your local .ssh keys only if 
+# (!) Copy your local .ssh keys only if
 #     necessary to connect to remote
 #######################################
