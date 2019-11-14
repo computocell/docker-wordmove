@@ -1,10 +1,9 @@
 Docker image to run [Wordmove](https://wptools.it/wordmove/).
 
-[![Docker Build Status](https://img.shields.io/docker/automated/welaika/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
-[![Docker Build Status](https://img.shields.io/docker/build/welaika/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
-[![Slack channel](https://img.shields.io/badge/Slack-WP--Hub-blue.svg)](https://wphub-auto-invitation.herokuapp.com/)
+[![Docker Build Status](https://img.shields.io/docker/automated/computocell/wordmove.svg)](https://hub.docker.com/r/welaika/wordmove/)
+[![Docker Build Status](https://img.shields.io/docker/build/computocell/wordmove.svg)](https://hub.docker.com/computocell/wordmove/)
 
-## What's inside
+## O que há dentro
 
 - openssh-server
 - curl
@@ -14,57 +13,38 @@ Docker image to run [Wordmove](https://wptools.it/wordmove/).
 - wordmove
 - wp-cli
 
-### TAG specific
+### TAG especifica
 
-We ship 3 flavours of this container:
+Enviamos 2 tags deste contêiner:
 
 - php7
 - alpine
-- php5 (deprecated and unmaintained)
 
 `php7` and `php5` tags are based upon Debian stretch
 `alpine` tag is - really - based upon Alpine Linux 3.9
 
-`php5` also ships with:
+## Como usar
 
-- sshpass
-- ENV RUBYOPT="-KU -E utf-8:utf-8" (Fix for some mysql sync issues when using old
-  db adapter)
+### Para executar essa imagem
 
-## Notable changes
+`docker run -it --rm -v ~/.ssh:/home/wordmove/.ssh:ro computocell/wordmove`
 
-Since the first version of this container, which is now tagged as `php5`, we got some
-potentially breaking changes.
-
-- There is no `wordmove` user anymore. Now Wordmove supports to be invoked from root user,
-  so we've removed some complexity from the container build.
-  See https://github.com/welaika/wordmove/releases/tag/v2.5.1
-- `sshpass` has been removed. It's use is discouraged and deprecated by Wordmove, so it
-  is in this container. We warmly recommend to use safer approaches.
-- `RUBYOPT` is no more exported. It was solving a problem disappeared since using wp-cli
-  by default, so we've removed complexity from the build.
-
-## How to use
-
-### To run this image
-
-`docker run -it --rm -v ~/.ssh:/home/wordmove/.ssh:ro welaika/wordmove`
-
-This starts a shell, with `wordmove` available on the command-line.
+Isso inicia um shell, com o `wordmove` disponível na linha de comando.
 
 ### ENV
 
-A `WORDMOVE_WORKDIR` environment variable is exported inside the container; since this is the
-container's `WORKDIR` path, you could use `<%= ENV['WORDMOVE_WORKDIR'] %>` inside a `movefile.yml`
-in order to solidly know the `pwd`.
+Uma variável de ambiente `WORDMOVE_WORKDIR` é exportada dentro do contêiner;
 
-For example running
+Como esse é o caminho `WORKDIR` do contêiner, você pode usar `<%= ENV['WORDMOVE_WORKDIR'] %>` dentro de um movefile.yml para conhecer o pwd de maneira sólida.
+
+Por exemplo, executando
 
 ```
-docker run --rm -v ~/.ssh:/root/.ssh:ro -v ~/dev/wp-site/:/html welaika/wordmove wordmove pull -d
+docker run --rm -v ~/.ssh:/root/.ssh:ro -v ~/dev/wp-site/:/html computocell/wordmove wordmove pull -d
 ```
 
 you could configure `movefile.yml` like
+você pode configurar o `movefile.yml` como
 
 ```yaml
 local:
@@ -72,43 +52,37 @@ local:
   # [...]
 ```
 
-### To run this image in a full Docker-based WordPress environment
+### Para executar esta imagem em um ambiente WordPress completo baseado no Docker WordPress environment
 
-See [Wordpress development made easy using Docker](https://medium.com/cluetip/wordpress-development-made-easy-440b564185f2)
+Veja o [desenvolvimento do Wordpress facilitado usando o Docker](https://medium.com/cluetip/wordpress-development-made-easy-440b564185f2)
 
-This tutorial explains how to set up a WordPress environment, using Docker
-Compose, with the following four interconnected containers:
+Este tutorial explica como configurar um ambiente WordPress, usando o Docker Compose, com os quatro contêineres interconectados a seguir::
 
 - database
 - wordpress
 - phpmyadmin
 - wordmove
 
-Don't forget to replace `image: mfuezesi/wordmove` with `image: welaika/wordmove` to get the latest version of Wordmove.
+## Limitações conhecidas
 
-## Known limitations
+- Se `sql_adapter` estiver definida para `wpcli`, o movefile deverá estar no mesmo diretório que o diretório do WordPress.
 
-- If `sql_adapter` is set to `wpcli`, then the movefile must be in the same
-  directory as the WordPress directory. See https://github.com/welaika/wordmove/issues/506
+Consulte https://github.com/welaika/wordmove/issues/506
 
-## Advanced usage
+## Uso avançado
 
-### To become root
+### Torna-se root
 
-Run `sudo su` and use `wordmove` as the password.
-
-## TODO
-
-- [x] Release the Alpine version of this image (see: https://github.com/welaika/docker-wordmove/issues/3)
-- [x] Configure Webhooks to build this image on Docker Hub when a new version of
-      the `wordmove` gem is available
+Execute `sudo su` e use `wordmove` como senha
 
 🎉
 
 ## Credits 🙏🏻
 
-Based on [mfuezesi/docker-wordmove](https://github.com/mfuezesi/docker-wordmove), with WP-CLI support added.
+Baseado em [mfuezesi/docker-wordmove](https://github.com/mfuezesi/docker-wordmove), with WP-CLI support added.
+e
+[welaika/wordmove](https://github.com/welaika/wordmove),
 
-## Maintainers
+## Mantedor
 
-@simonbland and @welaika dev team 😎
+@computocell dev team 😸
